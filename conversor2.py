@@ -1,6 +1,13 @@
 from tkinter import *
 from tkinter import ttk
+import requests
 
+valorDolar = requests.get("https://dolarapi.com/v1/dolares/oficial")
+valorEuro = requests.get("https://dolarapi.com/v1/cotizaciones/eur")
+valorReal = requests.get("https://dolarapi.com/v1/cotizaciones/brl")
+dolar = valorDolar.json()
+euro = valorEuro.json()
+real = valorReal.json()
 
 ventana = Tk()
 ventana.title = "Conversor"
@@ -31,10 +38,10 @@ ttk.Label(mainframe, text = "Reales: ").grid(column = 1, row = 4, sticky = E)
 
 def ejecucion():
     pesos = int(montoIngreso.get())
-    
-    dolares.configure(text = str(round((pesos / 150), 2)))
-    euros.configure(text = str(round((pesos / 183), 2)))
-    reales.configure(text = str(round((pesos / 16.57), 2)))
+
+    dolares.configure(text = str(round((pesos / dolar['venta']), 2)))
+    euros.configure(text = str(round((pesos / euro['venta']), 2)))
+    reales.configure(text = str(round((pesos / real['venta']), 2)))
 
 ttk.Button(mainframe, text = "Convertir", command = ejecucion).grid(column = 3, row = 4, sticky = W)
 
